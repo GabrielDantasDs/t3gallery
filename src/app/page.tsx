@@ -7,6 +7,7 @@ export default async function HomePage() {
   });
 
   return (
+    
     <main className="">
       <div className="flex flex-wrap gap-4">
         {images.map((image, index) => (
