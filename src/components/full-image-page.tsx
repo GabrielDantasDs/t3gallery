@@ -12,7 +12,6 @@ export default async function FullPageImageView(props: { id: number }) {
       </div>
 
       <div className="flex w-48 flex-col flex-shrink-0 flex-col border-l">
-        <div className="text-lg font-bold border-b text-center p-2">{image.name}</div>
         <div className="flex flex-col p-2">
           <span>
           Uploaded by: {uploaderInfo.fullName}

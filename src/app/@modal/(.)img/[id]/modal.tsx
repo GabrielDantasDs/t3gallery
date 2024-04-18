@@ -1,28 +1,49 @@
-'use client';
+"use client";
 
-import { type ElementRef, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { createPortal } from 'react-dom';
+import React, {
+  type ElementRef,
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+} from "react";
+import { useRouter } from "next/navigation";
+import { Modal as ReactModal } from "react-bootstrap";
+import Loading from "./loading";
 
-export function Modal({ children }: { children: React.ReactNode }) {
+export function Modal({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
   const router = useRouter();
-  const dialogRef = useRef<ElementRef<'dialog'>>(null);
+  const dialogRef = useRef<ElementRef<"dialog">>(null);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    if (!dialogRef.current?.open) {
-      dialogRef.current?.showModal();
-    }
-  }, []);
+    console.log("teste");
+  }, [children]);
 
   function onDismiss() {
     router.back();
   }
 
-  return createPortal(
-      <dialog ref={dialogRef} className="w-screen h-screen bg-black/90 m-0 text-white" onClose={onDismiss}>
-        {children}
+  function handleClose() {
+    setShow(false);
+    router.back();
+  }
+
+  return (
+    <ReactModal show={show} onHide={handleClose} size="lg" centered>
+      <ReactModal.Header closeButton>
+        <ReactModal.Title>{title}</ReactModal.Title>
+      </ReactModal.Header>
+      <ReactModal.Body>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
         <button onClick={onDismiss} className="close-button" />
-      </dialog>,
-    document.getElementById('modal-root')!
+      </ReactModal.Body>
+    </ReactModal>
   );
 }

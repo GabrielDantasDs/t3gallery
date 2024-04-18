@@ -1,6 +1,10 @@
+
 import { getMyImage } from "~/server/queries";
 import { Modal } from "./modal";
 import FullPageImageView from "~/components/full-image-page";
+import { toast } from "sonner";
+import { LoadingSpinnerSVG } from "~/utils/icons";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export default function PhotoModal({
   params: { id: photoId },
@@ -10,6 +14,7 @@ export default function PhotoModal({
   const idAsNumber = Number(photoId);
   if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id"); 
 
-  const image = getMyImage(idAsNumber)
-  return <Modal><FullPageImageView id={idAsNumber} /></Modal>;
+  return getMyImage(idAsNumber).then((res) => {
+    return <Modal title={res.name}><FullPageImageView id={idAsNumber}/></Modal>;
+  })
 }
