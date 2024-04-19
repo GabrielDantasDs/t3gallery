@@ -8,7 +8,7 @@ import React, {
   Suspense,
 } from "react";
 import { useRouter } from "next/navigation";
-import { Modal as ReactModal } from "react-bootstrap";
+import { Button, Modal as ReactModal } from "react-bootstrap";
 import Loading from "./loading";
 
 export function Modal({
@@ -36,13 +36,14 @@ export function Modal({
   }
 
   return (
-    <ReactModal show={show} onHide={handleClose} size="lg" centered>
+    <ReactModal show={show} onHide={handleClose} size="lg" centered enforceFocus={false}>
       <ReactModal.Header closeButton>
         <ReactModal.Title>{title}</ReactModal.Title>
       </ReactModal.Header>
       <ReactModal.Body>
-        <Suspense fallback={<Loading />}>{children}</Suspense>
-        <button onClick={onDismiss} className="close-button" />
+        <Suspense fallback={<Loading />}>
+          {children}
+          </Suspense>
       </ReactModal.Body>
     </ReactModal>
   );

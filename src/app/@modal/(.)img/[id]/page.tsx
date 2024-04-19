@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { LoadingSpinnerSVG } from "~/utils/icons";
 import { clerkClient } from "@clerk/nextjs/server";
 
-export default function PhotoModal({
+export default async function PhotoModal({
   params: { id: photoId },
 }: {
   params: { id: string };
@@ -14,7 +14,11 @@ export default function PhotoModal({
   const idAsNumber = Number(photoId);
   if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id"); 
 
-  return getMyImage(idAsNumber).then((res) => {
-    return <Modal title={res.name}><FullPageImageView id={idAsNumber}/></Modal>;
+  return getMyImage(idAsNumber).then( async (res) => {
+    const uploaderInfo = await clerkClient.users.getUser(res.userId);
+
+    return <Modal title={res.name}>
+      <FullPageImageView image={{...res, userName: uploaderInfo.fullName}}/>
+      </Modal>;
   })
 }
